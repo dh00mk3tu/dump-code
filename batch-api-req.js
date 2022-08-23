@@ -23,16 +23,6 @@ const rows = []; // This is the array of data, on which we will iterate over.
 const batchSize = 100; // This is the size of one single batch. For browsers, on a decent computer, I'd recommend to keep it between 100-250.
 const batchLimit = rows.length / batchSize; // Limit of a batch.
 
-// Note that this is an async function
-async function uploadCall(thisData, index) {
-    
-  await makeSomeAPICall({  
-    onSuccess: function(data) {
-      console.log("Uploaded: ", index);
-    }
-  });  
-}
-
 // Main function is async as well
 async function main() {
   for(let batchNumber = 0; batchNumber < batchLimit; batchNumber++){
@@ -42,11 +32,7 @@ async function main() {
 
     console.log("Running batch " + batchNumber);
     const promises = batch.map((item) => {
-       return UploadGameStatsToFirebase.trigger({
-         additionalScope: {
-           data: item
-         }
-       });
+       return MakeAPICall.trigger();
     });
     await Promise.all(promises); // Here we await for the promise returned by API call
   } 
